@@ -1,8 +1,9 @@
-﻿using System;
-using Dapper;
-using System.Data.Common;
+﻿using Dapper;
+using System;
+// using System.Data;
+// using System.Data.Common;
 using System.Text.RegularExpressions;
-using System.Data;
+using HelloWorld.Data;
 using HelloWorld.Models;
 using Microsoft.Data.SqlClient;
 
@@ -14,13 +15,9 @@ namespace HelloWorld
 
         static void Main(string[] args)
         {
-            string connectionString = "Server=localhost;Database=DotNetCourseDatabase;TrustServerCertificate=true;Trusted_Connection=true";
+            DataContextDapper dapper = new DataContextDapper();
 
-            IDbConnection dbConnection = new SqlConnection(connectionString);
-
-            string sqlCommand = "Select getdate()";
-
-            DateTime rightNow = dbConnection.QuerySingle<DateTime>(sqlCommand);
+            DateTime rightNow = dapper.LoadDataSingle<DateTime>("select getdate()");
 
             // Console.WriteLine(rightNow);
 
@@ -52,7 +49,8 @@ namespace HelloWorld
 
             // Console.WriteLine(sql);
 
-            int result = dbConnection.Execute(sql);
+            // int result = dapper.ExecuteSqlWithRowCount(sql);
+            bool result = dapper.ExecuteSql(sql);
 
             // Console.WriteLine(result);
 
@@ -65,7 +63,7 @@ namespace HelloWorld
                 Computer.VideoCard
                 FROM TutorialAppSchema.Computer";
 
-            IEnumerable<Computer> computers = dbConnection.Query<Computer>(sqlSelect);
+            IEnumerable<Computer> computers = dapper.LoadData<Computer>(sqlSelect);
 
             Console.WriteLine("'Motherboard','HasWifi','HasLTE','ReleaseDate','Price','VideoCard'");
             
