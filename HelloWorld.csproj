@@ -14,7 +14,11 @@
     <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="7.0.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <None Update="appsettings.json">
+    <!-- Due to the following error, the instructor added the NONE and CopyToOutputDirectory tags to resolve the error rather than copying the appsetting json file to the specified directory referenced in the error. 
+    Unhandled exception. System.IO.FileNotFoundException: 
+    The configuration file 'appsettings.json' was not found and is not optional. 
+    The expected physical path was 'C:\Udemy_Courses\dotnet-course-code\HelloWorld\bin\Debug\net7.0\appsettings.json'. -->
+    <None Update="appsettings.json"> 
       <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
     </None>
   </ItemGroup>

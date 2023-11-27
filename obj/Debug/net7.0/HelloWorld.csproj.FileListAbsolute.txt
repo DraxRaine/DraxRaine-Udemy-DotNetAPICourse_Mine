@@ -71,3 +71,4 @@ C:\Udemy_Courses\dotnet-course-code\HelloWorld\bin\Debug\net7.0\Microsoft.Extens
 C:\Udemy_Courses\dotnet-course-code\HelloWorld\bin\Debug\net7.0\System.Text.Encodings.Web.dll
 C:\Udemy_Courses\dotnet-course-code\HelloWorld\bin\Debug\net7.0\System.Text.Json.dll
 C:\Udemy_Courses\dotnet-course-code\HelloWorld\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll
+C:\Udemy_Courses\dotnet-course-code\HelloWorld\bin\Debug\net7.0\appsettings.json
