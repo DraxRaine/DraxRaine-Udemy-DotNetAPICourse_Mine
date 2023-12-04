@@ -10,7 +10,7 @@ namespace HelloWorld.Data
     {
         
             private IConfiguration _config;
-            private string _connectionString;
+            // private string _connectionString;
             public DataContextEF(IConfiguration config)
             {
                 _config = config;

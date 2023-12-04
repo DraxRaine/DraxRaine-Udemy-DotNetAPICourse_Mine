@@ -11,7 +11,7 @@ namespace HelloWorld.Data
     {
 
             // private IConfiguration _config;
-            private string _connectionString;
+            private string? _connectionString;
             public DataContextDapper(IConfiguration config)
             {
                 // _config = config;
