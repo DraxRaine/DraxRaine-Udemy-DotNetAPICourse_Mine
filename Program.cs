@@ -11,6 +11,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Serialization;
+using AutoMapper;
 
 namespace HelloWorld
 {
@@ -51,57 +52,89 @@ namespace HelloWorld
 
             // openFile.Close();
 
-            string computersJson = File.ReadAllText("Computers.json");
+            string computersJson = File.ReadAllText("ComputersSnake.json");
 
-            // Console.WriteLine(computersJson);
+            Mapper mapper = new Mapper(new MapperConfiguration((cfg) => {
+                cfg.CreateMap<ComputerSnake, Computer>()
+                .ForMember(destination => destination.ComputerId, options =>
+                    options.MapFrom(source => source.computer_id))
+                .ForMember(destination => destination.CPUCores, options =>
+                    options.MapFrom(source => source.cpu_cores))
+                .ForMember(destination => destination.HasLTE, options =>
+                    options.MapFrom(source => source.has_lte))
+                .ForMember(destination => destination.HasWifi, options =>
+                    options.MapFrom(source => source.has_wifi))
+                .ForMember(destination => destination.Motherboard, options =>
+                    options.MapFrom(source => source.motherboard))
+                .ForMember(destination => destination.VideoCard, options =>
+                    options.MapFrom(source => source.video_card))
+                .ForMember(destination => destination.ReleaseDate, options =>
+                    options.MapFrom(source => source.release_date))
+                .ForMember(destination => destination.Price, options =>
+                    options.MapFrom(source => source.price));
+            }));
 
-            JsonSerializerOptions options = new JsonSerializerOptions()
+            IEnumerable<ComputerSnake>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computersJson);
+
+            if (computersSystem != null)
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
+                IEnumerable<Computer> computerResult = mapper.Map<IEnumerable<Computer>>(computersSystem);
 
-            IEnumerable<Computer>? computersNewtonSoft = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
-            
-            IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson, options);
-            
-
-            // Console.WriteLine(computersJson);
-
-            if(computersNewtonSoft != null)
-            {
-                foreach(Computer computer in computersNewtonSoft)
+                foreach(Computer computer in computerResult)
                 {
-                string sql = @"INSERT INTO TutorialAppSchema.Computer(
-                Motherboard,
-                HasWifi,
-                HasLTE,
-                ReleaseDate,
-                Price,
-                VideoCard
-            ) values (
-                '" + EscapingSingleQuote(computer.Motherboard)
-                + "','" + computer.HasWifi
-                + "','" + computer.HasLTE
-                + "','" + computer.ReleaseDate
-                + "','" + computer.Price
-                + "','" + EscapingSingleQuote(computer.VideoCard)
-            + "')";
-
-            dapper.ExecuteSql(sql);
+                    Console.WriteLine(computer.Motherboard);
                 }
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings(){
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
+            // Console.WriteLine(computersJson);
 
-            string computersCopyNewtonsoft = JsonConvert.SerializeObject(computersNewtonSoft, settings);
+            // JsonSerializerOptions options = new JsonSerializerOptions()
+            // {
+            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            // };
 
-            File.WriteAllText("computersCopyNewtonsoft.txt", computersCopyNewtonsoft);
+            // IEnumerable<Computer>? computersNewtonSoft = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
             
-            string computersCopySystem = System.Text.Json.JsonSerializer.Serialize(computersSystem, options);
+            // IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson, options);
+            
 
-            File.WriteAllText("computersCopySystem.txt", computersCopySystem);
+            // // Console.WriteLine(computersJson);
+
+            // if(computersNewtonSoft != null)
+            // {
+            //     foreach(Computer computer in computersNewtonSoft)
+            //     {
+            //     string sql = @"INSERT INTO TutorialAppSchema.Computer(
+            //     Motherboard,
+            //     HasWifi,
+            //     HasLTE,
+            //     ReleaseDate,
+            //     Price,
+            //     VideoCard
+            // ) values (
+            //     '" + EscapingSingleQuote(computer.Motherboard)
+            //     + "','" + computer.HasWifi
+            //     + "','" + computer.HasLTE
+            //     + "','" + computer.ReleaseDate
+            //     + "','" + computer.Price
+            //     + "','" + EscapingSingleQuote(computer.VideoCard)
+            // + "')";
+
+            // dapper.ExecuteSql(sql);
+            //     }
+            // }
+
+            // JsonSerializerSettings settings = new JsonSerializerSettings(){
+            //     ContractResolver = new CamelCasePropertyNamesContractResolver()
+            // };
+
+            // string computersCopyNewtonsoft = JsonConvert.SerializeObject(computersNewtonSoft, settings);
+
+            // File.WriteAllText("computersCopyNewtonsoft.txt", computersCopyNewtonsoft);
+            
+            // string computersCopySystem = System.Text.Json.JsonSerializer.Serialize(computersSystem, options);
+
+            // File.WriteAllText("computersCopySystem.txt", computersCopySystem);
 
         }
 
