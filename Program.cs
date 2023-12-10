@@ -54,6 +54,7 @@ namespace HelloWorld
 
             string computersJson = File.ReadAllText("ComputersSnake.json");
 
+            /* Mapper mapper was replaced with [JsonPropertyName()] within the Models.Computer.cs file */ 
             Mapper mapper = new Mapper(new MapperConfiguration((cfg) => {
                 cfg.CreateMap<ComputerSnake, Computer>()
                 .ForMember(destination => destination.ComputerId, options =>
@@ -74,17 +75,32 @@ namespace HelloWorld
                     options.MapFrom(source => source.price));
             }));
 
+            /* Using mapper mapping above for this example */
+
             IEnumerable<ComputerSnake>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computersJson);
 
             if (computersSystem != null)
             {
                 IEnumerable<Computer> computerResult = mapper.Map<IEnumerable<Computer>>(computersSystem);
+                Console.WriteLine("Auto Mapper Count: " + computerResult.Count());
 
-                foreach(Computer computer in computerResult)
-                {
-                    Console.WriteLine(computer.Motherboard);
-                }
+                // foreach(Computer computer in computerResult)
+                // {
+                //     Console.WriteLine(computer.Motherboard);
+                // }
             }
+
+            IEnumerable<Computer>? computersJsonPropertyMapping = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson);
+            Console.WriteLine("JSON Property Count: " + computersJsonPropertyMapping?.Count());
+
+            // if (computersJsonPropertyMapping != null)
+            // {
+
+                // foreach(Computer computer in computersJsonPropertyMapping)
+                // {
+                //     Console.WriteLine(computer.Motherboard);
+                // }
+            // }
 
             // Console.WriteLine(computersJson);
 
